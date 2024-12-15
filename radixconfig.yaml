@@ -1,0 +1,30 @@
+apiVersion: radix.equinor.com/v1
+kind: RadixApplication
+metadata:
+  name: weatherview
+spec:
+  environments:
+    - name: prod
+  components:
+    - name: frontend
+      type: component
+      image: nginx:latest
+      ports:
+        - name: web
+          port: 80
+      public: true  
+      environmentConfig:
+        - environment: prod
+          replicas: 2
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+dnsExternalAlias:
+    - alias: weatherview.equinor.com
+      environment: prod
+      component: frontend
+      useCertificateAutomation: true
